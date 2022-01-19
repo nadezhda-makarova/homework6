@@ -2,27 +2,34 @@ const input = document.getElementById('task__input');
 const button = document.getElementById('tasks__add');
 const tasksList = document.getElementById('tasks__list');
 
-addEventsRemove = () => {
-  const removeBtn = document.querySelectorAll('.task__remove');
-  removeBtn.forEach((element) => {
-    element.addEventListener('click', (e) => {
-      e.target.closest('.task').remove();
-    });
-  });
-}
+removeTask = (e) => {
+  
+};
+
 
 button.addEventListener('click', (e) => {
   e.preventDefault();
-  const html = `<div class="task">
-    <div class="task__title">
-      ${input.value}
-    </div>
-    <a href="#" class="task__remove">&times;</a>
-  </div>`;
+  if(input.value.trim().length > 0) {
+    const task = document.createElement('div');
+    task.classList.add('task');
 
-  tasksList.insertAdjacentHTML('afterend', html);
+    task.innerHTML =  `
+      <div class="task__title">
+        ${input.value}
+      </div>
+      <a href="#" class="task__remove">&times;</a>
+    `;
+  
+    tasksList.appendChild(task);
 
-  addEventsRemove();
+    const removeBtn = task.querySelector('.task__remove');
 
-  input.value = '';
+    removeBtn.addEventListener('click', (e) => {
+      e.target.closest('.task').remove()
+    });
+  
+    input.value = '';
+  } else {
+    console.log('Поле с задачей должно быть заполнено!')
+  }
 });

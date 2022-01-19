@@ -1,6 +1,15 @@
 const cart = document.querySelector('.cart__products');
 
 const productsList = document.querySelectorAll('.product');
+let arr = [];
+
+getDataIdProducts = () => {
+  productsList.forEach(item => {
+    arr.push(item.getAttribute('data-id'));
+  });
+};
+
+getDataIdProducts();
 
 getInfoAboutProduct = (item) => {
   const controlsItem = item.querySelector('.product__controls');
@@ -27,34 +36,23 @@ getInfoAboutProduct = (item) => {
 
 
   addBtn.addEventListener('click', () => {
-
     const div = document.createElement('div');
 
-    div.setAttribute('data-id', dataId);
+    div.setAttribute('id', dataId);
     div.classList.add('cart__product');
 
     div.innerHTML = `
       <img class="cart__product-image" src=${imgItem}>
       <div class="cart__product-count">${countBlock.textContent}</div>
     `;
-
-    const cartList = cart.querySelectorAll('.cart__product');
-
-    if (cartList.length < 1) {
-      return cart.appendChild(div);
+    const idRenderElem = arr.find(item => item === dataId);
+    if(document.getElementById(idRenderElem)) {
+      const findedElem = document.getElementById(idRenderElem);
+      const prevCount = findedElem.querySelector('.cart__product-count').textContent;
+      findedElem.querySelector('.cart__product-count').innerHTML = Number(countBlock.textContent) + Number(prevCount);
     } else {
-      cartList.forEach(item => {
-        const idElem = item.getAttribute('data-id');
-        const countElem = item.querySelector('.cart__product-count');
-        if (idElem === dataId) {
-          item.remove();
-          div.querySelector('.cart__product-count').innerHTML = countElem.innerHTML = Number(countElem.textContent) + Number(countBlock.textContent);
-        } else {
-          return cart.appendChild(div)
-        }
-      });
+      cart.appendChild(div);
     }
-
   });
 };
 
